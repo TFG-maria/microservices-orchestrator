@@ -1,0 +1,9 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/TFG-maria/boilerplate-frontend-react.git
+[submodule "post-service"]
+	path = post-service
+	url = https://github.com/TFG-maria/boilerplate-backend-java-springboot.git
+[submodule "user-service"]
+	path = user-service
+	url = https://github.com/TFG-maria/boilerplate-backend-ts-express.git
