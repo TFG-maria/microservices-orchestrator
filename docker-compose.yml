@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: tfg_frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - user-service
+      - post-service
+
+  user-service:
+    build:
+      context: ./backend-node
+      dockerfile: Dockerfile
+    image: tfg_user_service:latest
+    environment:
+      - DB_HOST=db-users
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASS=prueba
+      - DB_NAME=users
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db-users
+
+  post-service:
+    build:
+      context: ./backend-springboot
+      dockerfile: Dockerfile
+    image: tfg_post_service:latest
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-posts:5432/posts
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=prueba
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db-posts
+
+  db-users:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=prueba
+      - POSTGRES_DB=users
+    volumes:
+      - db-users-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  db-posts:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=prueba
+      - POSTGRES_DB=posts
+    volumes:
+      - db-posts-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432" 
+
+volumes:
+  db-users-data:
+  db-posts-data:
