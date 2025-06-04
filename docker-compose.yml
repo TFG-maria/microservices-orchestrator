@@ -1,47 +1,6 @@
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: tfg_frontend:latest
-    ports:
-      - "80:80"
-    depends_on:
-      - user-service
-      - post-service
-
-  user-service:
-    build:
-      context: ./backend-node
-      dockerfile: Dockerfile
-    image: tfg_user_service:latest
-    environment:
-      - DB_HOST=db-users
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASS=prueba
-      - DB_NAME=users
-    ports:
-      - "4000:4000"
-    depends_on:
-      - db-users
-
-  post-service:
-    build:
-      context: ./backend-springboot
-      dockerfile: Dockerfile
-    image: tfg_post_service:latest
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-posts:5432/posts
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=prueba
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db-posts
-
   db-users:
     image: postgres:15-alpine
     environment:
@@ -63,6 +22,53 @@ services:
       - db-posts-data:/var/lib/postgresql/data
     ports:
       - "5433:5432" 
+      
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: tfg_frontend:latest
+    ports:
+      - "80:80"
+    environment:
+      VITE_USER_API_URL: "http://localhost:4000"
+      VITE_POST_API_URL: "http://localhost:8080"
+    depends_on:
+      - user-service
+      - post-service
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    image: tfg_user_service:latest
+    environment:
+      DB_HOST: db-users
+      DB_NAME: users
+      DB_PASSWORD: prueba
+      DB_PORT: "5432"
+      DB_USERNAME: postgres
+      HOST: 0.0.0.0
+      OPENAPI_PATH: ./docs/openapi.json
+      PORT: "8000"
+    ports:
+      - "4000:8000"
+    depends_on:
+      - db-users
+
+  post-service:
+    build:
+      context: ./post-service
+      dockerfile: Dockerfile
+    image: tfg_post_service:latest
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-posts:5432/posts
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=prueba
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db-posts
 
 volumes:
   db-users-data:
