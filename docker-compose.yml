@@ -27,12 +27,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_USER_API_URL: "http://localhost:4000"
+        VITE_POST_API_URL: "http://localhost:8080"
     image: tfg_frontend:latest
     ports:
-      - "80:80"
-    environment:
-      VITE_USER_API_URL: "http://localhost:4000"
-      VITE_POST_API_URL: "http://localhost:8080"
+      - "3000:80"
     depends_on:
       - user-service
       - post-service
