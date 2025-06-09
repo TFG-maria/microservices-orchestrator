@@ -13,7 +13,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: users
+        working-directory: user-service
 
     steps:
       - name: Checkout code

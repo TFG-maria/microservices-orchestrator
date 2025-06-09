@@ -3,7 +3,7 @@ name: Deploy to Railway
 on:
   push:
     paths:
-      - 'path/to/your/microservice/**'
+      - 'post-service/**'
     branches:
       - main
 
