@@ -29,7 +29,7 @@ services:
       dockerfile: Dockerfile
     image: tfg_frontend:latest
     ports:
-      - "3000:3000"
+      - "80:80"
     environment:
       VITE_USER_API_URL: "http://localhost:4000"
       VITE_POST_API_URL: "http://localhost:8080"
