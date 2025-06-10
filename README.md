@@ -42,9 +42,9 @@ docker-compose up --build
 
 Esto levantará:
 
-- El frontend accesible en http://localhost:5173
+- El frontend accesible en http://localhost:3000
 
-- El servicio de usuarios (user-service) en http://localhost:3001
+- El servicio de usuarios (user-service) en http://localhost:4000
 
 - El servicio de posts (post-service) en http://localhost:8080
 
